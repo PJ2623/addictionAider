@@ -1,3 +1,4 @@
+import 'package:addiction_aider/screens/chatbot.dart';
 import 'package:addiction_aider/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -18,7 +19,7 @@ class _MainHomeMangerState extends State<MainHomeManger> {
   // List of pages (Replace these with your actual pages)
   final List<Widget> _pages = [
     const CommunityPage(),
-    const AIChatBotPage(),
+    const ChatBotApp(),
     const Homepage(),
     const ChatsPage(),
     const NotesPage(),
