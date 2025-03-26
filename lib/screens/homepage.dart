@@ -39,20 +39,29 @@ class _HomepageState extends State<Homepage> {
             ),
             Container(
               decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(20),
             color: const Color(0xFF28E07E),
           ),
               child: 
             const Row(
               children: [
-                Column(
-                  children: [
-                    Text('STREAK 🔥', style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "Fatone",
-                      color: secColor,
-                    ),)
-                  ],
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Text('STREAK 🔥', style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: "Fatone",
+                        color: Colors.white,
+                      ),),
+                      SizedBox(height: 10,),
+                      Text('4 Days', style: TextStyle(
+                        fontSize: 26,
+                        fontFamily: "Fatone",
+                        color: Colors.white,
+                      ),),
+                    ],
+                  ),
                 )
               ],
             ),)
