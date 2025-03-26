@@ -7,20 +7,6 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFDCD9EC),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF28E07E),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {},
-          ),
-        ],
-      ),
       body: Column(
         children: [
           const Padding(
@@ -73,25 +59,7 @@ class CommunityPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.black),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF28E07E),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildNavItem(Icons.group, "Community", isSelected: true),
-            _buildNavItem(Icons.home, "", isSelected: false),
-            _buildNavItem(Icons.chat, "", isSelected: false),
-            _buildNavItem(Icons.person, "", isSelected: false),
-          ],
-        ),
-      ),
+      
     );
   }
 
