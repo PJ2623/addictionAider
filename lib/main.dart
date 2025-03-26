@@ -1,4 +1,5 @@
-import 'package:addiction_aider/screens/landingpage.dart';
+import 'package:addiction_aider/screens/communitypage.dart';
+//import 'package:addiction_aider/screens/landingpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +12,6 @@ class AddictionAiderApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: LandingPage());
+        debugShowCheckedModeBanner: false, home: CommunityPage());
   }
 }
