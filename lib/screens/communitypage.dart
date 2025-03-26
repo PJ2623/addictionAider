@@ -59,27 +59,6 @@ class CommunityPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.black),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFF28E07E),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildNavItem(Icons.group, "Community", context, '/community',
-                isSelected: true),
-            _buildNavItem(Icons.home, "", context, '/home', isSelected: false),
-            _buildNavItem(Icons.chat, "", context, '/chat', isSelected: false),
-            _buildNavItem(Icons.person, "", context, '/profile',
-                isSelected: false),
-          ],
-        ),
-      ),
     );
   }
 
@@ -141,33 +120,6 @@ class CommunityPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(
-      IconData icon, String label, BuildContext context, String route,
-      {required bool isSelected}) {
-    return GestureDetector(
-      onTap: () {
-        if (ModalRoute.of(context)?.settings.name != route) {
-          Navigator.pushReplacementNamed(context, route);
-        }
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: isSelected ? Colors.white : Colors.black, size: 30),
-          if (label.isNotEmpty)
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            ),
-        ],
       ),
     );
   }
