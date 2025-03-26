@@ -59,7 +59,6 @@ class CommunityPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.black),
       ),
-      
     );
   }
 
@@ -122,25 +121,6 @@ class CommunityPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label,
-      {required bool isSelected}) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, color: isSelected ? Colors.white : Colors.black, size: 30),
-        if (label.isNotEmpty)
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : Colors.black,
-            ),
-          ),
-      ],
     );
   }
 }
