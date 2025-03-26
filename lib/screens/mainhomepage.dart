@@ -17,10 +17,10 @@ class _MainHomeMangerState extends State<MainHomeManger> {
         backgroundColor: Colors.white,
       ),
       bottomNavigationBar: GNav(
-        gap: 8,
+        gap: 0.1,
         activeColor: Colors.white,
         iconSize: 24,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
         duration: const Duration(milliseconds: 800),
         tabBackgroundColor: Colors.grey,
         tabs: const [
@@ -51,12 +51,9 @@ class _MainHomeMangerState extends State<MainHomeManger> {
         },
       ),
       body: const Center(
-        child: Column(
-          children: [
-
-          ],
-        )
-      ),
+          child: Column(
+        children: [],
+      )),
     );
   }
 }
