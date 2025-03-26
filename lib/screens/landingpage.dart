@@ -33,12 +33,13 @@ class LandingPage extends StatelessWidget {
                             builder: (context) => const SignUpPage()));
                   },
                   child: Container(
-                    decoration: (BoxDecoration(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF28E07E),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
                         color: const Color(0xFF28E07E),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: const Color(0xFF28E07E),
-                        ))),
+                      ),
+                    ),
                     child: const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 50, vertical: 16),
@@ -60,15 +61,16 @@ class LandingPage extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SignUpPage()));
+                            builder: (context) => const LoginPage()));
                   },
                   child: Container(
-                    decoration: (BoxDecoration(
-                        color: const Color(0xFFDCD9EC),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: const Color(0xFF28E07E),
-                        ))),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFDCD9EC),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: const Color(0xFF28E07E),
+                      ),
+                    ),
                     child: const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 50, vertical: 16),
@@ -84,35 +86,6 @@ class LandingPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 15),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: Color(0xFF28E07E)),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                      );
-                    },
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'baloo',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -121,7 +94,7 @@ class LandingPage extends StatelessWidget {
             'JOIN OUR COMMUNITY OF 100K+',
             style: TextStyle(
               fontSize: 14,
-              fontFamily: 'baloo',
+              fontFamily: 'Baloo',
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
