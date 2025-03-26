@@ -20,7 +20,8 @@ class LoginPage extends StatelessWidget {
           const Text(
             'LOGIN',
             style: TextStyle(
-              fontSize: 28,
+              fontFamily: 'Baloo',
+              fontSize: 60,
               fontWeight: FontWeight.bold,
               color: Colors.black,
             ),
@@ -42,6 +43,7 @@ class LoginPage extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       hintText: 'USERNAME OR EMAIL',
                       hintStyle: TextStyle(
+                        fontFamily: 'Baloo',
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -61,6 +63,7 @@ class LoginPage extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       hintText: 'PASSWORD',
                       hintStyle: TextStyle(
+                        fontFamily: 'Baloo', // Applied Baloo font
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -88,6 +91,7 @@ class LoginPage extends StatelessWidget {
                     child: const Text(
                       'LOGIN',
                       style: TextStyle(
+                        fontFamily: 'Baloo', 
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -102,6 +106,7 @@ class LoginPage extends StatelessWidget {
                     const Text(
                       "DON'T HAVE AN ACCOUNT?",
                       style: TextStyle(
+                        fontFamily: 'Baloo', // Applied Baloo font
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
@@ -112,6 +117,7 @@ class LoginPage extends StatelessWidget {
                       child: const Text(
                         'CREATE ONE',
                         style: TextStyle(
+                          fontFamily: 'Baloo', // Applied Baloo font
                           color: Color(0xFF28E07E),
                           fontWeight: FontWeight.bold,
                           fontSize: 14,

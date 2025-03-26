@@ -1,4 +1,5 @@
 import 'package:addiction_aider/screens/login.dart';
+import 'package:addiction_aider/screens/strugglespage.dart';
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -26,10 +27,22 @@ class _SignUpPageState extends State<SignUpPage> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    setState(() {
-      _dobController.text = "${picked?.toLocal()}".split(' ')[0];
-    });
+    if (picked != null) {
+      setState(() {
+        _dobController.text = "${picked.toLocal()}".split(' ')[0];
+      });
     }
+  }
+
+  void _showSuccessMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Account created successfully!'),
+        backgroundColor: Colors.green,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +54,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 80,
-              ),
+              const SizedBox(height: 80),
               const Text(
                 'SIGN UP',
                 style: TextStyle(
@@ -69,16 +80,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: _selectedGender,
-                      decoration: _inputDecoration(
-                        'GENDER',
-                      ),
+                      decoration: _inputDecoration('GENDER'),
                       items: ['Male', 'Female', 'Other']
                           .map((gender) => DropdownMenuItem(
                                 value: gender,
-                                child: Text(
-                                  gender,
-                                  style: const TextStyle(height: 2),
-                                ),
+                                child: Text(gender,
+                                    style: const TextStyle(height: 2)),
                               ))
                           .toList(),
                       onChanged: (value) {
@@ -114,7 +121,14 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _showSuccessMessage();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const StrugglesSelectionPage()));
+                  },
                   child: const Text(
                     'CONTINUE',
                     style: TextStyle(
