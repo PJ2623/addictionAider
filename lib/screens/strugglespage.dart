@@ -1,3 +1,4 @@
+import 'package:addiction_aider/screens/mainhomepage.dart';
 import 'package:flutter/material.dart';
 
 class StrugglesSelectionPage extends StatefulWidget {
@@ -52,7 +53,8 @@ class _StrugglesSelectionPageState extends State<StrugglesSelectionPage> {
                 padding: const EdgeInsets.only(bottom: 15),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF28E07E), width: 2),
+                    border:
+                        Border.all(color: const Color(0xFF28E07E), width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: CheckboxListTile(
@@ -88,7 +90,10 @@ class _StrugglesSelectionPageState extends State<StrugglesSelectionPage> {
                   ),
                 ),
                 onPressed: () {
-                  // Handle button click
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const MainHomeManger()));
                 },
                 child: const Text(
                   "CONTINUE",
