@@ -1,3 +1,4 @@
+import 'package:addiction_aider/screens/mainhomepage.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -77,7 +78,13 @@ class LoginPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainHomeManger()));
+
+                    },
                     child: const Text(
                       'LOGIN',
                       style: TextStyle(
