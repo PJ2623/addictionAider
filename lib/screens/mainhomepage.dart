@@ -18,10 +18,10 @@ class _MainHomeMangerState extends State<MainHomeManger> {
   // List of pages (Replace these with your actual pages)
   final List<Widget> _pages = [
     const CommunityPage(),
-    AIChatBotPage(),
+    const AIChatBotPage(),
     const Homepage(),
-    ChatsPage(),
-    NotesPage(),
+    const ChatsPage(),
+    const NotesPage(),
   ];
 
   @override
@@ -118,6 +118,8 @@ class _MainHomeMangerState extends State<MainHomeManger> {
 
 
 class AIChatBotPage extends StatelessWidget {
+  const AIChatBotPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("AI ChatBot Page"));
@@ -127,6 +129,8 @@ class AIChatBotPage extends StatelessWidget {
 
 
 class ChatsPage extends StatelessWidget {
+  const ChatsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("Chats Page"));
@@ -134,6 +138,8 @@ class ChatsPage extends StatelessWidget {
 }
 
 class NotesPage extends StatelessWidget {
+  const NotesPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text("Notes Page"));
