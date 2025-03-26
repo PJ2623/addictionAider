@@ -16,40 +16,76 @@ class _MainHomeMangerState extends State<MainHomeManger> {
       appBar: AppBar(
         backgroundColor: Colors.white,
       ),
-      bottomNavigationBar: GNav(
-        gap: 8,
-        activeColor: Colors.white,
-        iconSize: 24,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        duration: const Duration(milliseconds: 800),
-        tabBackgroundColor: Colors.grey,
-        tabs: const [
+       bottomNavigationBar: Padding(
+         padding: const EdgeInsets.all(8.0),
+         child: Container(
+             width: double.infinity,
+             
+             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+               color: const Color(0xFF28E07E),
+               
+             ),
+             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
+             child: GNav(
+               gap: 8,
+               activeColor: Colors.black,
+               iconSize: 30,
+               color: Colors.black,
+               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+               duration: const Duration(milliseconds: 800),
+               tabBackgroundColor: Colors.white,
+               backgroundColor: Colors.transparent, // Transparent to match container color
+               tabs: const [
           GButton(
             icon: LucideIcons.usersRound,
             text: 'Dashboard',
+            textStyle: TextStyle(
+              fontFamily: 'Baloo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           GButton(
             icon: LucideIcons.botMessageSquare,
             text: 'AI ChatBot',
+            textStyle: TextStyle(
+              fontFamily: 'Baloo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           GButton(
-            icon: Icons.bookmark,
+            icon: LucideIcons.house,
             text: 'Home',
+            textStyle: TextStyle(
+              fontFamily: 'Baloo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           GButton(
-            icon: Icons.person,
+            icon: LucideIcons.messageCircle,
             text: 'Chats',
+            textStyle: TextStyle(
+              fontFamily: 'Baloo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
           GButton(
-            icon: Icons.person,
+            icon: LucideIcons.notebookPen,
             text: 'Notes',
+            textStyle: TextStyle(
+              fontFamily: 'Baloo',
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ],
-        selectedIndex: 0,
-        onTabChange: (index) {
+               ],
+               selectedIndex: 0,
+               onTabChange: (index) {
           setState(() {});
-        },
-      ),
+               },
+             ),
+           ),
+       ),
+
       body: const Center(
         child: Column(
           children: [
