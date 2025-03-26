@@ -59,7 +59,6 @@ class CommunityPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.black),
       ),
-<<<<<<< HEAD
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Color(0xFF28E07E),
@@ -81,9 +80,6 @@ class CommunityPage extends StatelessWidget {
           ],
         ),
       ),
-=======
-      
->>>>>>> 7fc64cc61f8ee33d0c98f2361ccc3537e1977ff3
     );
   }
 
