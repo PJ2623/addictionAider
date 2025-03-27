@@ -1,7 +1,7 @@
 import 'package:addiction_aider/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:web_socket_channel/html.dart'; // Web-compatible WebSocket
+import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 
 class ChatBotApp extends StatelessWidget {
@@ -25,7 +25,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  late HtmlWebSocketChannel _channel;
+  late WebSocketChannel _channel;
   final List<Map<String, dynamic>> _messages = [];
   bool _isConnected = false;
   bool _isConnecting = false;
@@ -33,20 +33,19 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    _initConnection();
-  }
-
-  Future<void> _initConnection() async {
-    setState(() => _isConnecting = true);
-    _messages.add({'text': 'Connecting to AI assistant...', 'isMe': false});
-    await _connectToWebSocket();
+    _connectToWebSocket();
   }
 
   Future<void> _connectToWebSocket() async {
+    setState(() {
+      _isConnecting = true;
+      _messages.add({'text': 'Connecting to AI assistant...', 'isMe': false});
+    });
+
     try {
-      _channel = HtmlWebSocketChannel.connect(
+      // Use the correct endpoint for your bot ws://localhost:8000/api/v1/bot/ws
+      _channel = WebSocketChannel.connect(
         Uri.parse('ws://localhost:8000/api/v1/bot/ws'),
-        protocols: ['chat'],
       );
 
       // Verify connection is established
