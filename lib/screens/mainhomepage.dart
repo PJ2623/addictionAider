@@ -18,7 +18,6 @@ class MainHomeManger extends StatefulWidget {
 class _MainHomeMangerState extends State<MainHomeManger> {
   int _selectedIndex = 0;
 
-  // List of pages (Replace these with your actual pages)
   final List<Widget> _pages = [
     const CommunityPage(),
     const ChatBotApp(),
@@ -31,12 +30,18 @@ class _MainHomeMangerState extends State<MainHomeManger> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFDCD9EC),
+      drawer: const CustomDrawer(), // Attach the drawer here
       appBar: AppBar(
         backgroundColor: const Color(0xFF28E07E),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(LucideIcons.menu, color: Colors.black),
-          onPressed: () {},
+        leading: Builder(
+          // FIX: Wrap in Builder to access Scaffold correctly
+          builder: (context) => IconButton(
+            icon: const Icon(LucideIcons.menu, color: Colors.black),
+            onPressed: () {
+              Scaffold.of(context).openDrawer(); // Open the drawer
+            },
+          ),
         ),
         actions: [
           IconButton(
@@ -64,46 +69,11 @@ class _MainHomeMangerState extends State<MainHomeManger> {
             tabBackgroundColor: const Color(0xFFDCD9EC),
             backgroundColor: Colors.transparent,
             tabs: const [
-              GButton(
-                icon: LucideIcons.usersRound,
-                text: 'Community',
-                textStyle: TextStyle(
-                  fontFamily: 'Baloo',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GButton(
-                icon: LucideIcons.botMessageSquare,
-                text: 'AI ChatBot',
-                textStyle: TextStyle(
-                  fontFamily: 'Baloo',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GButton(
-                icon: LucideIcons.house,
-                text: 'Home',
-                textStyle: TextStyle(
-                  fontFamily: 'Baloo',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GButton(
-                icon: LucideIcons.messageCircle,
-                text: 'Chats',
-                textStyle: TextStyle(
-                  fontFamily: 'Baloo',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              GButton(
-                icon: LucideIcons.notebookPen,
-                text: 'Notes',
-                textStyle: TextStyle(
-                  fontFamily: 'Baloo',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              GButton(icon: LucideIcons.usersRound, text: 'Community'),
+              GButton(icon: LucideIcons.botMessageSquare, text: 'AI ChatBot'),
+              GButton(icon: LucideIcons.house, text: 'Home'),
+              GButton(icon: LucideIcons.messageCircle, text: 'Chats'),
+              GButton(icon: LucideIcons.notebookPen, text: 'Notes'),
             ],
             selectedIndex: _selectedIndex,
             onTabChange: (index) {
@@ -114,34 +84,92 @@ class _MainHomeMangerState extends State<MainHomeManger> {
           ),
         ),
       ),
-      body: _pages[_selectedIndex], // Display selected page
+      body: _pages[_selectedIndex],
     );
   }
 }
 
-class AIChatBotPage extends StatelessWidget {
-  const AIChatBotPage({super.key});
+// Custom Drawer (Side Menu)
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("AI ChatBot Page"));
+    return Drawer(
+      child: Container(
+        color: const Color(0xFF28E07E),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 50),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  DrawerItem(
+                      icon: LucideIcons.userRound,
+                      text: "PROFILE",
+                      onTap: () {}),
+                  DrawerItem(
+                      icon: LucideIcons.heartHandshake,
+                      text: "DONATIONS",
+                      onTap: () {}),
+                  DrawerItem(
+                      icon: LucideIcons.star,
+                      text: "UPGRADE TO PREMIUM",
+                      onTap: () {}),
+                  DrawerItem(
+                      icon: LucideIcons.settings,
+                      text: "SETTINGS",
+                      onTap: () {}),
+                  const SizedBox(height: 50),
+                  const Text(
+                    "APP VERSION 0.1 BETA",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
-class ChatsPage extends StatelessWidget {
-  const ChatsPage({super.key});
+// Drawer Menu Item Widget
+class DrawerItem extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final VoidCallback onTap;
+
+  const DrawerItem(
+      {required this.icon, required this.text, required this.onTap, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Chats Page"));
-  }
-}
-
-class NotesPage extends StatelessWidget {
-  const NotesPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text("Notes Page"));
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.black, size: 24),
+            const SizedBox(width: 10),
+            Text(
+              text,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
