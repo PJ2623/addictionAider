@@ -1,3 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
+import 'package:addiction_aider/consts/colors.dart';
+import 'package:addiction_aider/consts/textfields.dart';
 import 'package:addiction_aider/screens/login.dart';
 import 'package:addiction_aider/screens/strugglespage.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +10,17 @@ class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SignUpPageState createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController retypepasswordController = TextEditingController();
   final TextEditingController _dobController = TextEditingController();
   String? _selectedGender;
 
@@ -47,142 +57,157 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFDCD9EC),
+      ),
       backgroundColor: const Color(0xFFDCD9EC),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 80),
-              const Text(
-                'SIGN UP',
-                style: TextStyle(
-                  fontSize: 50,
-                  fontFamily: "Fatone",
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+            'assets/images/Addiction Aider Logo-no background.png',
+            height: 140,
+          ),
+          const SizedBox(height: 16),
+            const Text(
+              'SIGN UP',
+              style: TextStyle(
+                fontSize: 50,
+                fontFamily: "Fatone",
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
               ),
-              const SizedBox(height: 30),
-              Row(
+            ),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 34),
+              child: Column(
                 children: [
-                  Expanded(child: _buildTextField('FIRST NAME')),
-                  const SizedBox(width: 10),
-                  Expanded(child: _buildTextField('LAST NAME')),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ShortUserNameField(
+                          controller: firstNameController, 
+                          hintText: 'FIRST NAME'
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ShortUserNameField(
+                          controller: lastNameController, 
+                          hintText: 'LAST NAME'
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ShortUserNameField(
+                          controller: usernameController, 
+                          hintText: 'CREATE USERNAME'
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ShortUserNameField(
+                          controller: emailController, 
+                          hintText: 'EMAIL ADDRESS'
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: DateOfBirthField(
+                          controller: _dobController,
+                        
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: GenderList(controller: genderController)
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  PasswordTextField(controller: passwordController, hintText: 'CREATE PASSWORD'),
+                  const SizedBox(height: 10),
+                  PasswordTextField(controller: retypepasswordController, hintText: 'CONFIRM PASSWORD'),
                 ],
               ),
-              const SizedBox(height: 15),
-              _buildTextField('CREATE USERNAME'),
-              const SizedBox(height: 15),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: _selectedGender,
-                      decoration: _inputDecoration('GENDER'),
-                      items: ['Male', 'Female', 'Other']
-                          .map((gender) => DropdownMenuItem(
-                                value: gender,
-                                child: Text(gender,
-                                    style: const TextStyle(height: 2)),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value;
-                        });
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: TextField(
-                      controller: _dobController,
-                      readOnly: true,
-                      onTap: () => _selectDate(context),
-                      decoration: _inputDecoration('DATE OF BIRTH'),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 15),
-              _buildTextField('CREATE PASSWORD', obscureText: true),
-              const SizedBox(height: 15),
-              _buildTextField('CONFIRM PASSWORD', obscureText: true),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF28E07E),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: () {
-                    _showSuccessMessage();
+            ),
+            const SizedBox(height: 20),
+            GestureDetector(
+                  onTap: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                const StrugglesSelectionPage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const StrugglesSelectionPage()));
                   },
-                  child: const Text(
-                    'CONTINUE',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: secColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        width: 2,
+                        color: const Color(0xFF28E07E),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'HAVE AN ACCOUNT? ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoginPage()),
-                      );
-                    },
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        color: Color(0xFF28E07E),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                      child: Text(
+                        'CONTINUE',
+                        style: TextStyle(
+                          fontFamily: 'Baloo',
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+            
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'HAVE AN ACCOUNT? ',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontFamily: 'Baloo',
+                    color: Colors.black,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
+                    );
+                  },
+                  child: const Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      color: Color(0xFF28E07E),
+                      fontFamily: 'Baloo',
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField(String hintText, {bool obscureText = false}) {
-    return TextField(
-      obscureText: obscureText,
-      textAlign: TextAlign.center,
-      style: const TextStyle(fontFamily: 'Baloo'),
-      decoration: _inputDecoration(hintText),
     );
   }
 

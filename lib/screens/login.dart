@@ -9,14 +9,15 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController usernameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-    return SingleChildScrollView(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFDCD9EC),
-        ),
+    final TextEditingController passwordController = TextEditingController();
+    
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: const Color(0xFFDCD9EC),
-        body: Column(
+      ),
+      backgroundColor: const Color(0xFFDCD9EC),
+      body: SingleChildScrollView(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
@@ -39,40 +40,38 @@ class LoginPage extends StatelessWidget {
                 children: [
                   LongTextField(controller: usernameController, readOnly: false, hintText: 'USERNAME OR EMAIL'),
                   const SizedBox(height: 10),
-                  LongTextField(controller: passwordController, hintText: 'PASSWORD', readOnly: false,), 
+                  PasswordTextField(controller: passwordController, hintText: 'PASSWORD',), 
                   const SizedBox(height: 36),
                   GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainHomeManger()));
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: secColor,
-      
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            width: 2,
-                            color: const Color(0xFF28E07E),
-                          ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainHomeManger()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: secColor,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          width: 2,
+                          color: const Color(0xFF28E07E),
                         ),
-                        child: const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 50, vertical: 16),
-                          child: Text(
-                            'LOGIN',
-                            style: TextStyle(
-                              fontFamily: 'Baloo',
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
+                      ),
+                      child: const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                        child: Text(
+                          'LOGIN',
+                          style: TextStyle(
+                            fontFamily: 'Baloo',
+                            fontSize: 18,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ),
-                  
+                  ),
                   const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

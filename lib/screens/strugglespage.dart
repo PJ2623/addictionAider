@@ -1,6 +1,8 @@
 import 'package:addiction_aider/screens/mainhomepage.dart';
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
+
 class StrugglesSelectionPage extends StatefulWidget {
   const StrugglesSelectionPage({super.key});
 
@@ -32,12 +34,16 @@ class _StrugglesSelectionPageState extends State<StrugglesSelectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color(0xFFDCD9EC),
+      ),
       backgroundColor: const Color(0xFFDCD9EC),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 80),
+        padding: const EdgeInsets.symmetric(horizontal: 30,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+
             const Text(
               "I'm struggling with...",
               style: TextStyle(
@@ -50,18 +56,17 @@ class _StrugglesSelectionPageState extends State<StrugglesSelectionPage> {
             const SizedBox(height: 30),
             ...struggles.map((struggle) {
               return Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+                padding: const EdgeInsets.only(bottom: 10),
                 child: Container(
                   decoration: BoxDecoration(
                     border:
                         Border.all(color: const Color(0xFF28E07E), width: 2),
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(15),
                   ),
                   child: CheckboxListTile(
                     title: Text(
                       struggle,
                       style: const TextStyle(
-                        fontWeight: FontWeight.bold,
                         fontSize: 16,
                         fontFamily: "Baloo",
                       ),
@@ -78,34 +83,39 @@ class _StrugglesSelectionPageState extends State<StrugglesSelectionPage> {
                 ),
               );
             }),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF28E07E),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
+            const SizedBox(height: 10),
+            GestureDetector(
+                  onTap: () {
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const MainHomeManger()));
-                },
-                child: const Text(
-                  "CONTINUE",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontFamily: "Baloo",
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: secColor,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        width: 2,
+                        color: const Color(0xFF28E07E),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                      child: Text(
+                        'CONTINUE',
+                        style: TextStyle(
+                          fontFamily: 'Baloo',
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
+            
+            
           ],
         ),
       ),

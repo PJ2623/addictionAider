@@ -22,7 +22,6 @@ class _MainHomeMangerState extends State<MainHomeManger> {
     const CommunityPage(),
 
     const AIChatBotPage(),
-
     const ChatBotApp(),
     const Homepage(),
     const Chatspage(),
@@ -62,7 +61,7 @@ class _MainHomeMangerState extends State<MainHomeManger> {
             iconSize: 30,
             color: Colors.black,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 300),
             tabBackgroundColor: const Color(0xFFDCD9EC),
             backgroundColor: Colors.transparent,
             tabs: const [
