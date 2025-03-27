@@ -20,9 +20,6 @@ class _MainHomeMangerState extends State<MainHomeManger> {
   // List of pages (Replace these with your actual pages)
   final List<Widget> _pages = [
     const CommunityPage(),
-
-    const AIChatBotPage(),
-
     const ChatBotApp(),
     const Homepage(),
     const Chatspage(),

@@ -10,7 +10,7 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   // Simplified with fixed values
-  int _streakDays = 0; // You can set this to any initial value you want
+  final int _streakDays = 0; // You can set this to any initial value you want
 
   @override
   Widget build(BuildContext context) {
@@ -167,22 +167,22 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
             ),
-          
+
             //The two options
             Row(
               children: [
                 Container(
                   height: 200,
                   decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xFF28E07E),
-                ),
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF28E07E),
+                  ),
                 ),
                 Container(
                   decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: const Color(0xFF28E07E),
-                ),
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF28E07E),
+                  ),
                 )
               ],
             )
