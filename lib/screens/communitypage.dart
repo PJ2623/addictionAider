@@ -1,4 +1,6 @@
+import 'package:addiction_aider/consts/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({super.key});
@@ -9,18 +11,15 @@ class CommunityPage extends StatelessWidget {
       backgroundColor: const Color(0xFFDCD9EC),
       body: Column(
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 20),
-            child: Text(
-              'Community',
-              style: TextStyle(
-                fontSize: 40,
-                fontFamily: "Fatone",
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+          const Text(
+            'Community',
+            style: TextStyle(
+              fontSize: 50,
+              fontFamily: "Fatone",
+              color: Colors.black,
             ),
           ),
+          const SizedBox(height: 20),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -29,11 +28,11 @@ class CommunityPage extends StatelessWidget {
                   username: "her_excellency",
                   type: "STORY",
                   content:
-                      "I was lost in my addiction, every day felt like a battle I couldn’t win. It controlled my life, took everything from me...",
+                      "I was lost in my addiction, every day felt like a battle I couldn’t win. It controlled my life, took everything from me everything from my family and all that I loved. I was a slave to my addiction, and I didn’t know how to break free.",
                 ),
                 _buildCommunityCard(
-                  username: "Sara Jones",
-                  type: "STORY",
+                  username: "Sara_Jones",
+                  type: "ARTICLE",
                   content:
                       "I knew I had to stop, but I just couldn't! I knew I had to stop when I woke up naked in the street...",
                 ),
@@ -57,7 +56,7 @@ class CommunityPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFFDCD9EC),
         onPressed: () {},
-        child: const Icon(Icons.add, color: Colors.black),
+        child: const Icon(LucideIcons.plus, color: Colors.black),
       ),
     );
   }
@@ -68,7 +67,7 @@ class CommunityPage extends StatelessWidget {
     required String content,
   }) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -76,43 +75,68 @@ class CommunityPage extends StatelessWidget {
         ),
         color: const Color(0xFFDCD9EC),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                username,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black,
+              Center(
+                child: Text(
+                  username,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: "Baloo",
+                    color: Colors.black,
+                  ),
                 ),
               ),
-              Text(
-                type,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                  color: Colors.green,
+              Center(
+                child: Text(
+                  type,
+                  style: const TextStyle(
+                    fontFamily: "Fatone",
+                    fontSize: 14,
+                    color: Colors.green,
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
-              Text(
-                content,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14, color: Colors.black),
+              Center(
+                child: Text(
+                  content,
+                  maxLines: 3,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 14, 
+                  height: 1,
+                  fontFamily: "Baloo",
+                  color: Colors.black),
+                ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    "READ MORE",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      color: Colors.black,
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Center(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      decoration: BoxDecoration(
+                                  color: mainColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: const Color(0xFF28E07E),
+                                  ),
+                                ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text(
+                          "READ MORE",
+                          style: TextStyle(
+                            fontFamily: "Fatone",
+                            fontSize: 14,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),

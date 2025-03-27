@@ -1,6 +1,7 @@
 import 'package:addiction_aider/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 class ChatBotApp extends StatelessWidget {
   const ChatBotApp({super.key});
@@ -23,31 +24,83 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
+  late WebSocketChannel _channel;
   final List<Map<String, dynamic>> _messages = [
     {
       'text': 'Hello! How can I help you today?',
       'isMe': false,
     },
-    {
-      'text': 'I\'m not feeling well.',
-      'isMe': true,
-    },
-    {
-      'text': 'What exactly do you mean by not feeling well?',
-      'isMe': false,
-    },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _connectToWebSocket();
+  }
+
+  void _connectToWebSocket() {
+    // Replace with your actual WebSocket URL
+    _channel = WebSocketChannel.connect(
+      Uri.parse('ws://192.168.64.1/api/v1/chat/ws'),
+    );
+
+    _channel.stream.listen(
+      (message) {
+        setState(() {
+          _messages.add({
+            'text': message,
+            'isMe': false,
+          });
+        });
+      },
+      onError: (error) {
+        print('WebSocket error: $error');
+        // Add error message to chat
+        setState(() {
+          _messages.add({
+            'text': 'Connection error. Trying to reconnect...',
+            'isMe': false,
+          });
+        });
+        // Try to reconnect after 5 seconds
+        Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
+      },
+      onDone: () {
+        print('WebSocket connection closed');
+        // Add connection closed message to chat
+        setState(() {
+          _messages.add({
+            'text': 'Connection lost. Trying to reconnect...',
+            'isMe': false,
+          });
+        });
+        // Try to reconnect after 5 seconds
+        Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
+      },
+    );
+  }
 
   void _sendMessage() {
     if (_controller.text.trim().isNotEmpty) {
+      final message = _controller.text;
       setState(() {
         _messages.add({
-          'text': _controller.text,
+          'text': message,
           'isMe': true,
         });
       });
+      
+      // Send message through WebSocket
+      _channel.sink.add(message);
       _controller.clear();
     }
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -116,6 +169,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       maxLines: null, // Allows unlimited lines
                       keyboardType: TextInputType.multiline,
+                      onSubmitted: (_) => _sendMessage(),
                       decoration: InputDecoration(
                         hintText: "How are you feeling?",
                         hintStyle: const TextStyle(
