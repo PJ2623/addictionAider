@@ -1,8 +1,6 @@
+import 'package:addiction_aider/consts/colors.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(const ChatBotApp());
-}
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class ChatBotApp extends StatelessWidget {
   const ChatBotApp({super.key});
@@ -25,9 +23,31 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
+  final List<Map<String, dynamic>> _messages = [
+    {
+      'text': 'Hello! How can I help you today?',
+      'isMe': false,
+    },
+    {
+      'text': 'I\'m not feeling well.',
+      'isMe': true,
+    },
+    {
+      'text': 'What exactly do you mean by not feeling well?',
+      'isMe': false,
+    },
+  ];
 
   void _sendMessage() {
-    _controller.clear();
+    if (_controller.text.trim().isNotEmpty) {
+      setState(() {
+        _messages.add({
+          'text': _controller.text,
+          'isMe': true,
+        });
+      });
+      _controller.clear();
+    }
   }
 
   @override
@@ -36,50 +56,106 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: const Color(0xFFDCD9EC),
       body: Column(
         children: [
-          const SizedBox(height: 16), // Space between AppBar and Title
           const Text(
             'AI ChatBot',
             style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
+              fontSize: 50,
               fontFamily: "Fatone",
               color: Colors.black,
             ),
           ),
-          const Spacer(),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16),
+              reverse: false,
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                return Align(
+                  alignment: message['isMe']
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(20),
+                      border: message['isMe']
+                          ? Border.all(color: secColor, width: 2)
+                          : Border.all(color: mainColor),
+                    ),
+                    child: Text(
+                      message['text'],
+                      style: TextStyle(
+                        fontFamily: "Baloo",
+                        color: message['isMe'] ? blackColor : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: "Type Something",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.green),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 120, // 5 lines * 24px line height approx
+                    ),
+                    child: TextField(
+                      controller: _controller,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Baloo",
                       ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.green),
+                      maxLines: null, // Allows unlimited lines
+                      keyboardType: TextInputType.multiline,
+                      decoration: InputDecoration(
+                        hintText: "How are you feeling?",
+                        hintStyle: const TextStyle(
+                          color: Colors.black,
+                          fontFamily: "Baloo",
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: secColor),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: secColor),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: const BorderSide(color: secColor),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 14),
+                        filled: true,
+                        fillColor: Colors.transparent,
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.green),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
-                      filled: true,
-                      fillColor: Colors.transparent,
                     ),
                   ),
                 ),
                 const SizedBox(width: 10),
-                FloatingActionButton(
-                  backgroundColor: Colors.green,
-                  onPressed: _sendMessage,
-                  child: const Icon(Icons.send, color: Colors.white),
+                GestureDetector(
+                  onTap: _sendMessage,
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: secColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Icon(
+                      LucideIcons.send,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),
