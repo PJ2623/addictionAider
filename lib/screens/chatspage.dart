@@ -1,3 +1,4 @@
+import 'package:addiction_aider/screens/messages.dart';
 import 'package:flutter/material.dart';
 
 class Chatspage extends StatelessWidget {
@@ -40,47 +41,57 @@ class MessagesScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12.0),
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF28E07E),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 24,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MessagesPage(),
                         ),
-                        SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Sober_Acts',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                                color: Colors.white,
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF28E07E),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 24,
+                          ),
+                          SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Sober_Acts',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'GROUP',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white,
+                              Text(
+                                'GROUP',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'How are you guys today',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.white,
+                              Text(
+                                'How are you guys today',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -95,7 +106,7 @@ class MessagesScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: const Color(0xFFDCD9EC),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: const BorderSide(color: Color(0xFF28E07E)),
@@ -104,7 +115,12 @@ class MessagesScreen extends StatelessWidget {
                     onPressed: () {},
                     child: const Text(
                       'FIND GROUPS',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Fatone",
+                      ),
                     ),
                   ),
                 ),
@@ -112,7 +128,7 @@ class MessagesScreen extends StatelessWidget {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
+                      backgroundColor: const Color(0xFFDCD9EC),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: const BorderSide(color: Color(0xFF28E07E)),
@@ -121,7 +137,12 @@ class MessagesScreen extends StatelessWidget {
                     onPressed: () {},
                     child: const Text(
                       'FIND COUNSELOR',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "Fatone",
+                      ),
                     ),
                   ),
                 ),
