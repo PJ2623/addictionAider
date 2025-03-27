@@ -1,4 +1,5 @@
 import 'package:addiction_aider/screens/chatbot.dart';
+import 'package:addiction_aider/screens/chatspage.dart';
 import 'package:addiction_aider/screens/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -21,7 +22,7 @@ class _MainHomeMangerState extends State<MainHomeManger> {
     const CommunityPage(),
     const ChatBotApp(),
     const Homepage(),
-    const ChatsPage(),
+    const Chatspage(),
     const NotesPage(),
   ];
 
