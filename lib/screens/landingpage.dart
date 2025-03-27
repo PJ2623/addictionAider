@@ -13,12 +13,12 @@ class LandingPage extends StatelessWidget {
       ),
       backgroundColor: const Color(0xFFDCD9EC),
       body: Center(
-        // Wrap Column in Center to align everything properly
+        
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment:
-              CrossAxisAlignment.center, // Ensure horizontal centering
+              CrossAxisAlignment.center,
           children: [
+            const SizedBox(height: 40),
             Image.asset(
               'assets/images/Addiction Aider Logo-no background.png',
               height: 200,
@@ -38,20 +38,19 @@ class LandingPage extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFF28E07E),
-                        borderRadius: BorderRadius.circular(14),
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: const Color(0xFF28E07E),
                         ),
                       ),
                       child: const Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                            EdgeInsets.symmetric(horizontal: 44, vertical: 16),
                         child: Text(
                           'SIGN UP',
                           style: TextStyle(
                             fontFamily: 'Baloo',
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
                         ),
@@ -69,8 +68,10 @@ class LandingPage extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         color: const Color(0xFFDCD9EC),
-                        borderRadius: BorderRadius.circular(14),
+
+                        borderRadius: BorderRadius.circular(20),
                         border: Border.all(
+                          width: 2,
                           color: const Color(0xFF28E07E),
                         ),
                       ),
@@ -82,7 +83,6 @@ class LandingPage extends StatelessWidget {
                           style: TextStyle(
                             fontFamily: 'Baloo',
                             fontSize: 18,
-                            fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
@@ -92,14 +92,13 @@ class LandingPage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 50),
             const Text(
               'JOIN OUR COMMUNITY OF 100K+',
-              textAlign: TextAlign.center, // Ensure text is centered
+              textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 16,
                 fontFamily: 'Baloo',
-                fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
             ),

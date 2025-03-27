@@ -1,3 +1,5 @@
+import 'package:addiction_aider/consts/colors.dart';
+import 'package:addiction_aider/consts/textfields.dart';
 import 'package:addiction_aider/screens/mainhomepage.dart';
 import 'package:flutter/material.dart';
 
@@ -6,131 +8,102 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFDCD9EC),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          Image.asset(
-            'assets/images/Addiction Aider Logo-no background.png',
-            height: 200,
-          ),
-          const SizedBox(height: 20),
-          const Text(
-            'LOGIN',
-            style: TextStyle(
-              fontFamily: 'Baloo',
-              fontSize: 60,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+    final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+    return SingleChildScrollView(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFFDCD9EC),
+        ),
+        backgroundColor: const Color(0xFFDCD9EC),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/Addiction Aider Logo-no background.png',
+              height: 140,
             ),
-          ),
-          const SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF28E07E)),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      hintText: 'USERNAME OR EMAIL',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Baloo',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xFF28E07E)),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                      hintText: 'PASSWORD',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Baloo', // Applied Baloo font
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF28E07E),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MainHomeManger()));
-
-                    },
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        fontFamily: 'Baloo', 
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "DON'T HAVE AN ACCOUNT?",
-                      style: TextStyle(
-                        fontFamily: 'Baloo', // Applied Baloo font
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: const Text(
-                        'CREATE ONE',
-                        style: TextStyle(
-                          fontFamily: 'Baloo', // Applied Baloo font
-                          color: Color(0xFF28E07E),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+            const SizedBox(height: 16),
+            const Text(
+              'LOGIN',
+              style: TextStyle(
+                fontFamily: 'Fatone',
+                fontSize: 60,
+                color: Colors.black,
+              ),
+            ),
+            const SizedBox(height: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                children: [
+                  LongTextField(controller: usernameController, readOnly: false, hintText: 'USERNAME OR EMAIL'),
+                  const SizedBox(height: 10),
+                  LongTextField(controller: passwordController, hintText: 'PASSWORD', readOnly: false,), 
+                  const SizedBox(height: 36),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MainHomeManger()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: secColor,
+      
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            width: 2,
+                            color: const Color(0xFF28E07E),
+                          ),
+                        ),
+                        child: const Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 50, vertical: 16),
+                          child: Text(
+                            'LOGIN',
+                            style: TextStyle(
+                              fontFamily: 'Baloo',
+                              fontSize: 18,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "DON'T HAVE AN ACCOUNT?",
+                        style: TextStyle(
+                          fontFamily: 'Baloo',
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          ' CREATE ONE',
+                          style: TextStyle(
+                            fontFamily: 'Baloo',
+                            color: Color(0xFF28E07E),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Spacer(),
-        ],
+          ],
+        ),
       ),
     );
   }
