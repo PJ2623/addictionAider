@@ -178,6 +178,7 @@ class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateM
                   child: child,
                 );
               },
+              //hjghjghjgjg
               child: Container(
                 width: 12,
                 height: 12,
