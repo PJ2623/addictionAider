@@ -1,7 +1,8 @@
 import 'package:addiction_aider/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:web_socket_channel/html.dart'; // Web-compatible WebSocket
+import 'package:web_socket_channel/status.dart' as status;
 
 class ChatBotApp extends StatelessWidget {
   const ChatBotApp({super.key});
@@ -24,81 +25,126 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  late WebSocketChannel _channel;
-  final List<Map<String, dynamic>> _messages = [
-    {
-      'text': 'Hello! How can I help you today?',
-      'isMe': false,
-    },
-  ];
+  late HtmlWebSocketChannel _channel;
+  final List<Map<String, dynamic>> _messages = [];
+  bool _isConnected = false;
+  bool _isConnecting = false;
 
   @override
   void initState() {
     super.initState();
-    _connectToWebSocket();
+    _initConnection();
   }
 
-  void _connectToWebSocket() {
-    // Replace with your actual WebSocket URL
-    _channel = WebSocketChannel.connect(
-      Uri.parse('ws://192.168.64.1/api/v1/chat/ws'),
-    );
+  Future<void> _initConnection() async {
+    setState(() => _isConnecting = true);
+    _messages.add({'text': 'Connecting to AI assistant...', 'isMe': false});
+    await _connectToWebSocket();
+  }
 
-    _channel.stream.listen(
-      (message) {
-        setState(() {
-          _messages.add({
-            'text': message,
-            'isMe': false,
-          });
-        });
-      },
-      onError: (error) {
-        print('WebSocket error: $error');
-        // Add error message to chat
-        setState(() {
-          _messages.add({
-            'text': 'Connection error. Trying to reconnect...',
-            'isMe': false,
-          });
-        });
-        // Try to reconnect after 5 seconds
-        Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
-      },
-      onDone: () {
-        print('WebSocket connection closed');
-        // Add connection closed message to chat
-        setState(() {
-          _messages.add({
-            'text': 'Connection lost. Trying to reconnect...',
-            'isMe': false,
-          });
-        });
-        // Try to reconnect after 5 seconds
-        Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
-      },
-    );
+  Future<void> _connectToWebSocket() async {
+    try {
+      _channel = HtmlWebSocketChannel.connect(
+        Uri.parse('ws://localhost:8000/api/v1/bot/ws'),
+        protocols: ['chat'],
+      );
+
+      // Verify connection is established
+      await _channel.ready.timeout(const Duration(seconds: 5));
+
+      setState(() {
+        _isConnected = true;
+        _isConnecting = false;
+        // Remove connecting message if still present
+        if (_messages.isNotEmpty && _messages.first['text'].contains('Connecting')) {
+          _messages.removeAt(0);
+        }
+      });
+
+      _channel.stream.listen(
+        (message) {
+          setState(() => _messages.add({'text': message, 'isMe': false}));
+        },
+        onError: (error) {
+          print('WebSocket error: $error');
+          _handleConnectionError();
+        },
+        onDone: () {
+          print('WebSocket connection closed');
+          _handleConnectionError();
+        },
+      );
+    } catch (e) {
+      print('Connection error: $e');
+      _handleConnectionError();
+    }
+  }
+
+  void _handleConnectionError() {
+    setState(() {
+      _isConnected = false;
+      _isConnecting = false;
+      _messages.add({'text': 'Connection lost. Reconnecting in 5 seconds...', 'isMe': false});
+    });
+    Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
   }
 
   void _sendMessage() {
-    if (_controller.text.trim().isNotEmpty) {
-      final message = _controller.text;
+    final message = _controller.text.trim();
+    if (message.isEmpty) return;
+
+    if (!_isConnected) {
       setState(() {
-        _messages.add({
-          'text': message,
-          'isMe': true,
-        });
+        _messages.add({'text': 'Not connected to server', 'isMe': false});
       });
-      
-      // Send message through WebSocket
+      return;
+    }
+
+    setState(() {
+      _messages.add({'text': message, 'isMe': true});
+    });
+
+    try {
       _channel.sink.add(message);
       _controller.clear();
+    } catch (e) {
+      setState(() {
+        _messages.add({'text': 'Failed to send message', 'isMe': false});
+      });
+      _handleConnectionError();
     }
+  }
+
+  Widget _buildConnectionIndicator() {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            _isConnected ? Icons.circle : Icons.circle_outlined,
+            color: _isConnected ? Colors.green : Colors.orange,
+            size: 12,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            _isConnected 
+              ? 'Connected' 
+              : _isConnecting ? 'Connecting...' : 'Disconnected',
+            style: TextStyle(
+              color: _isConnected ? Colors.green : Colors.orange,
+              fontFamily: "Baloo",
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _channel.sink.close();
+    _channel.sink.close(status.goingAway);
     _controller.dispose();
     super.dispose();
   }
@@ -109,14 +155,16 @@ class _ChatScreenState extends State<ChatScreen> {
       backgroundColor: const Color(0xFFDCD9EC),
       body: Column(
         children: [
+          const SizedBox(height: 16),
           const Text(
             'AI ChatBot',
             style: TextStyle(
-              fontSize: 50,
+              fontSize: 32,
               fontFamily: "Fatone",
               color: Colors.black,
             ),
           ),
+          _buildConnectionIndicator(),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -131,13 +179,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 4),
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 12),
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
-                      color: Colors.transparent,
+                      color: message['isMe'] 
+                          ? secColor.withOpacity(0.2) 
+                          : mainColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(20),
-                      border: message['isMe']
-                          ? Border.all(color: secColor, width: 2)
-                          : Border.all(color: mainColor),
+                      border: Border.all(
+                        color: message['isMe'] ? secColor : mainColor,
+                        width: 1.5,
+                      ),
                     ),
                     child: Text(
                       message['text'],
@@ -154,45 +207,39 @@ class _ChatScreenState extends State<ChatScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Expanded(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(
-                      maxHeight: 120, // 5 lines * 24px line height approx
+                  child: TextField(
+                    controller: _controller,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontFamily: "Baloo",
                     ),
-                    child: TextField(
-                      controller: _controller,
-                      style: const TextStyle(
-                        color: Colors.black,
+                    onSubmitted: (_) => _sendMessage(),
+                    decoration: InputDecoration(
+                      hintText: "How are you feeling?",
+                      hintStyle: const TextStyle(
+                        color: Colors.black54,
                         fontFamily: "Baloo",
                       ),
-                      maxLines: null, // Allows unlimited lines
-                      keyboardType: TextInputType.multiline,
-                      onSubmitted: (_) => _sendMessage(),
-                      decoration: InputDecoration(
-                        hintText: "How are you feeling?",
-                        hintStyle: const TextStyle(
-                          color: Colors.black,
-                          fontFamily: "Baloo",
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: secColor),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: secColor),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: const BorderSide(color: secColor),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        filled: true,
-                        fillColor: Colors.transparent,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: secColor),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: secColor),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: const BorderSide(color: secColor),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
+                      filled: true,
+                      fillColor: Colors.white.withOpacity(0.7),
                     ),
                   ),
                 ),
