@@ -23,126 +23,180 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
   final List<Map<String, dynamic>> _messages = [];
-  bool _isConnected = false;
-  bool _isConnecting = false;
+  bool _isWaitingForResponse = false;
+  late AnimationController _loadingController;
+  late Animation<double> _dot1Animation;
+  late Animation<double> _dot2Animation;
+  late Animation<double> _dot3Animation;
 
   @override
   void initState() {
     super.initState();
     _connectToWebSocket();
+    
+    // Initialize animation controller
+    _loadingController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+    
+    // Create animations for each dot
+    _dot1Animation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.2, end: 1.0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.2), weight: 1),
+    ]).animate(CurvedAnimation(
+      parent: _loadingController,
+      curve: const Interval(0.0, 0.33, curve: Curves.easeInOut),
+    ));
+    
+    _dot2Animation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.2, end: 1.0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.2), weight: 1),
+    ]).animate(CurvedAnimation(
+      parent: _loadingController,
+      curve: const Interval(0.33, 0.66, curve: Curves.easeInOut),
+    ));
+    
+    _dot3Animation = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0.2, end: 1.0), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.2), weight: 1),
+    ]).animate(CurvedAnimation(
+      parent: _loadingController,
+      curve: const Interval(0.66, 1.0, curve: Curves.easeInOut),
+    ));
   }
 
-  Future<void> _connectToWebSocket() async {
-    setState(() {
-      _isConnecting = true;
-      _messages.add({'text': 'Connecting to AI assistant...', 'isMe': false});
-    });
+  void _connectToWebSocket() {
+    _channel = WebSocketChannel.connect(
+      Uri.parse('ws://localhost:8000/api/v1/bot/ws'),
+    );
 
-    try {
-      // Use the correct endpoint for your bot ws://localhost:8000/api/v1/bot/ws
-      _channel = WebSocketChannel.connect(
-        Uri.parse('ws://localhost:8000/api/v1/bot/ws'),
-      );
-
-      // Verify connection is established
-      await _channel.ready.timeout(const Duration(seconds: 5));
-
-      setState(() {
-        _isConnected = true;
-        _isConnecting = false;
-        // Remove connecting message if still present
-        if (_messages.isNotEmpty && _messages.first['text'].contains('Connecting')) {
-          _messages.removeAt(0);
-        }
-      });
-
-      _channel.stream.listen(
-        (message) {
-          setState(() => _messages.add({'text': message, 'isMe': false}));
-        },
-        onError: (error) {
-          print('WebSocket error: $error');
-          _handleConnectionError();
-        },
-        onDone: () {
-          print('WebSocket connection closed');
-          _handleConnectionError();
-        },
-      );
-    } catch (e) {
-      print('Connection error: $e');
-      _handleConnectionError();
-    }
-  }
-
-  void _handleConnectionError() {
-    setState(() {
-      _isConnected = false;
-      _isConnecting = false;
-      _messages.add({'text': 'Connection lost. Reconnecting in 5 seconds...', 'isMe': false});
-    });
-    Future.delayed(const Duration(seconds: 5), _connectToWebSocket);
+    _channel.stream.listen(
+      (message) {
+        setState(() {
+          _isWaitingForResponse = false;
+          _messages.add({
+            'text': message,
+            'isMe': false,
+            'timestamp': DateTime.now(),
+          });
+        });
+      },
+      onError: (error) {
+        setState(() => _isWaitingForResponse = false);
+        print('WebSocket error: $error');
+      },
+      onDone: () {
+        setState(() => _isWaitingForResponse = false);
+        print('WebSocket connection closed');
+      },
+    );
   }
 
   void _sendMessage() {
     final message = _controller.text.trim();
     if (message.isEmpty) return;
 
-    if (!_isConnected) {
-      setState(() {
-        _messages.add({'text': 'Not connected to server', 'isMe': false});
-      });
-      return;
-    }
-
     setState(() {
-      _messages.add({'text': message, 'isMe': true});
+      _messages.add({
+        'text': message,
+        'isMe': true,
+        'timestamp': DateTime.now(),
+      });
+      _isWaitingForResponse = true;
     });
 
-    try {
-      _channel.sink.add(message);
-      _controller.clear();
-    } catch (e) {
-      setState(() {
-        _messages.add({'text': 'Failed to send message', 'isMe': false});
-      });
-      _handleConnectionError();
-    }
+    _channel.sink.add(message);
+    _controller.clear();
   }
 
-  Widget _buildConnectionIndicator() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            _isConnected ? Icons.circle : Icons.circle_outlined,
-            color: _isConnected ? Colors.green : Colors.orange,
-            size: 12,
+  Widget _buildLoadingIndicator() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+          border: Border.all(
+            color: whiteColor,
+            width: 1.5,
           ),
-          const SizedBox(width: 6),
-          Text(
-            _isConnected 
-              ? 'Connected' 
-              : _isConnecting ? 'Connecting...' : 'Disconnected',
-            style: TextStyle(
-              color: _isConnected ? Colors.green : Colors.orange,
-              fontFamily: "Baloo",
-              fontSize: 12,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedBuilder(
+              animation: _dot1Animation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _dot1Animation.value,
+                  child: child,
+                );
+              },
+              child: Container(
+                width: 12,
+                height: 12,
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: const BoxDecoration(
+                  color: secColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
             ),
-          ),
-        ],
+            AnimatedBuilder(
+              animation: _dot2Animation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _dot2Animation.value,
+                  child: child,
+                );
+              },
+              child: Container(
+                width: 12,
+                height: 12,
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: const BoxDecoration(
+                  color: secColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _dot3Animation,
+              builder: (context, child) {
+                return Opacity(
+                  opacity: _dot3Animation.value,
+                  child: child,
+                );
+              },
+              child: Container(
+                width: 12,
+                height: 12,
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                decoration: const BoxDecoration(
+                  color: secColor,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   @override
   void dispose() {
+    _loadingController.dispose();
     _channel.sink.close(status.goingAway);
     _controller.dispose();
     super.dispose();
@@ -163,13 +217,16 @@ class _ChatScreenState extends State<ChatScreen> {
               color: Colors.black,
             ),
           ),
-          _buildConnectionIndicator(),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
               reverse: false,
-              itemCount: _messages.length,
+              itemCount: _messages.length + (_isWaitingForResponse ? 1 : 0),
               itemBuilder: (context, index) {
+                if (_isWaitingForResponse && index == _messages.length) {
+                  return _buildLoadingIndicator();
+                }
+                
                 final message = _messages[index];
                 return Align(
                   alignment: message['isMe']
@@ -183,20 +240,33 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     decoration: BoxDecoration(
                       color: message['isMe'] 
-                          ? secColor.withOpacity(0.2) 
-                          : mainColor.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(20),
+                          ? secColor
+                          : mainColor,
+                      borderRadius: BorderRadius.circular(15),
                       border: Border.all(
-                        color: message['isMe'] ? secColor : mainColor,
+                        color: message['isMe'] ? secColor : Colors.transparent,
                         width: 1.5,
                       ),
                     ),
-                    child: Text(
-                      message['text'],
-                      style: TextStyle(
-                        fontFamily: "Baloo",
-                        color: message['isMe'] ? blackColor : Colors.black,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          message['text'],
+                          style: TextStyle(
+                            fontFamily: "Baloo",
+                            color: message['isMe'] ? blackColor : Colors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${message['timestamp'].hour}:${message['timestamp'].minute.toString().padLeft(2, '0')}',
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
