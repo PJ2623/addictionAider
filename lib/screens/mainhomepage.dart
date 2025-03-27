@@ -1,6 +1,7 @@
 import 'package:addiction_aider/screens/chatbot.dart';
 import 'package:addiction_aider/screens/chatspage.dart';
 import 'package:addiction_aider/screens/homepage.dart';
+import 'package:addiction_aider/screens/notespage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -23,7 +24,7 @@ class _MainHomeMangerState extends State<MainHomeManger> {
     const ChatBotApp(),
     const Homepage(),
     const Chatspage(),
-    const NotesPage(),
+    const Notespage(),
   ];
 
   @override
